@@ -26,7 +26,7 @@ def get_ojects(xml_file_path, images_dirpath):
         ymax = int(bbox.find('ymax').text)
 
         # Store into the cow collection
-        cows.append({'xmin': xmin, 'xmax': xmax, 'ymin': ymin, 'ymax': ymax, 'filename': join(images_dirpath, filename)})
+        cows.append({'xmin': xmin, 'xmax': xmax, 'ymin': ymin, 'ymax': ymax, 'filename': join('images/', filename)})
 
     return cows
 
@@ -46,7 +46,7 @@ def arrange_annotations_file(annotation_dirpath, images_dirpath):
             print(cow)
             for i in cow:
                 cow[i] = str(cow[i])
-            filewriter.writerow([cow['filename'], cow['xmax'], cow['ymax'], cow['xmin'], cow['ymin'], 'cow'])
+            filewriter.writerow([cow['filename'], cow['xmin'], cow['ymin'], cow['xmax'], cow['ymax'], 'cow'])
 
 
 arrange_annotations_file('./Dataset/FriesianCattle2017/annotations', './Dataset/FriesianCattle2017/images')
