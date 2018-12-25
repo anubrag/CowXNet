@@ -6,6 +6,8 @@ snapshot-*
 videos/
 pose-tensorflow/models/
 Generating_a_Training_Set/
+temp/
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
