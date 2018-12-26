@@ -103,16 +103,15 @@ def CreateVideo(clip,Dataframe):
             plt.figure(frameon=False, figsize=(w * 1. / 100, h * 1. / 100))
             plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
             plt.imshow(image)
-            for start_index in range(0, index+1):
-                for bpindex, bp in enumerate(bodyparts2plot):
-                    if ((Dataframe[scorer][bp]['likelihood'].values[start_index] > pcutoff) and ("Nose" in bp)):
-                        plt.scatter(
-                            Dataframe[scorer][bp]['x'].values[start_index],
-                            Dataframe[scorer][bp]['y'].values[start_index],
-                            s=dotsize**2,
-                            color=colors(bpindex),
-                            alpha=alphavalue)
-                 
+
+            for bpindex, bp in enumerate(bodyparts2plot):
+                if Dataframe[scorer][bp]['likelihood'].values[index] > pcutoff:
+                    plt.scatter(
+                        Dataframe[scorer][bp]['x'].values[index],
+                        Dataframe[scorer][bp]['y'].values[index],
+                        s=dotsize**2,
+                        color=colors(bpindex),
+                        alpha=alphavalue)
 
             plt.xlim(0, w)
             plt.ylim(0, h)
