@@ -6,7 +6,7 @@
 from sklearn.metrics.pairwise import euclidean_distances
 
 # Distance cutoff for heat possibility
-DISTANCE_CUTOFF = 100
+DISTANCE_CUTOFF = 75
 
 class BehaviorAnalyst:
 
