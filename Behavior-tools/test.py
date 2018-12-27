@@ -37,7 +37,7 @@ def test(Dataframe):
 
         for main_bpindex, main_bp in enumerate(bodyparts2plot):
             for factor_bpindex, factor_bp in enumerate(bodyparts2plot):
-                if ((main_bp[-5:] not in factor_bp) and (((main_bp + " VS " + factor_bp not in state_collector.keys()) and (factor_bp + " VS " + main_bp not in state_collector.keys())) or (frame_name not in state_collector[main_bp + " VS " + factor_bp].keys()))):
+                if ((main_bp[-5:] not in factor_bp) and (((main_bp + " VS " + factor_bp not in state_collector.keys()) and (factor_bp + " VS " + main_bp not in state_collector.keys())) and (frame_name not in state_collector[main_bp + " VS " + factor_bp].keys()))):
                     xA = Dataframe[scorer][main_bp]['x'].values[index]
                     yA = Dataframe[scorer][main_bp]['y'].values[index]
                     xB = Dataframe[scorer][factor_bp]['x'].values[index]
@@ -46,13 +46,13 @@ def test(Dataframe):
                         point_A = [[xA, yA]]
                         point_B = [[xB, yB]]
                         heat_prob, fac = X.analyzeHeatProbOnFrame(point_A, point_B)
-                        if index != 50:
+                        if index != 0:
                             recent_cs = state_collector[main_bp + " VS " + factor_bp][Dataframe.index[index - 1]]['cs']
                             current_cs = recent_cs + fac
                         else:
                             current_cs = fac
                     else:
-                        if index != 50:
+                        if index != 0:
                             heat_prob = state_collector[main_bp + " VS " + factor_bp][Dataframe.index[index - 1]]['heat_prob']
                             if heat_prob:
                                 current_cs = state_collector[main_bp + " VS " + factor_bp][Dataframe.index[index - 1]]['cs'] + 1
@@ -78,12 +78,13 @@ Dataframe = pd.read_hdf("../temp/train_10fr_500/CollectedData_Sky.h5")
 a = dict(test(Dataframe))
 
 # ------
-font = ImageFont.truetype('Roboto-Bold.ttf', size=25)
+font = ImageFont.truetype('arial.ttf', size=25)
 color = 'rgb(255, 0, 0)'
 nframes = len(Dataframe.index)
 for index in tqdm(range(nframes)):
 
-    (x, y) = (20, 20)
+    (x, y) = (20, 10)
+
     frame_name = Dataframe.index[index]
     image = Image.open(frame_name)
     draw = ImageDraw.Draw(image)
@@ -92,22 +93,19 @@ for index in tqdm(range(nframes)):
         cs = a[pare][frame_name]['cs']
         if cs >= 5:
             cows = pare.split(" VS ")
-            message = "Heat: " + "Cow" + cows[0][len(cows[0]) - 1] + " or " + "Cow" + cows[1][len(cows[1]) - 1]
+            if "Nose" in cows[0]:
+                message = "Heat: " + "Cow" + cows[0][len(cows[0]) - 1]
+            else:
+                message = "Heat: " + "Cow" + cows[1][len(cows[1]) - 1]
             draw.text((x, y), message, fill=color, font=font)
             y -= 30
 
-    image.save(str(index) + '.png')
-
-
+    image.save('cow_all10_heat/' + frame_name.split('/')[1])
 # ------
 
 # for pare in a:
 #     print("-------->", pare)
 #     for frame in a[pare]:
-#         image = Image.open(frame)
-#         draw = ImageDraw.Draw(image)
-#         draw.text((x, y), message, fill=color, font=font)
-#         image.save(frame)
-        # if a[pare][frame]['cs'] >= 5:
-        #     print("=======>", frame, "Count State:", a[pare][frame]['cs'])
+#         if a[pare][frame]['cs'] >= 5:
+#             print("=======>", frame, "Count State:", a[pare][frame]['cs'])
         
