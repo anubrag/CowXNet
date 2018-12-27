@@ -13,6 +13,9 @@ from tqdm import tqdm
 import collections
 import imageio
 from BehaviorAnalyst import BehaviorAnalyst
+from skimage import io
+import matplotlib.pyplot as plt
+from myconfig import scale
 
 # Test
 from PIL import Image, ImageDraw, ImageFont
@@ -82,35 +85,87 @@ Dataframe = pd.read_hdf("../temp/train_10fr_500/CollectedData_Sky.h5")
 a = dict(test(Dataframe))
 
 # ------
-font = ImageFont.truetype("arial.ttf", size=25)
-color = 'rgb(255, 0, 0)'
 nframes = len(Dataframe.index)
 for index in tqdm(range(nframes)):
-
-    (x, y) = (20, 10)
+    
+    x = 20
+    y = 40
 
     frame_name = Dataframe.index[index]
-    image = Image.open(frame_name)
-    draw = ImageDraw.Draw(image)
+    image = io.imread(frame_name)
+    plt.axis('off')
+
+    if np.ndim(image)==2:
+        h, w = np.shape(image)
+    else:
+        h, w, nc = np.shape(image)
+
+    plt.figure(
+        frameon=False, figsize=(w * 1. / 100 * scale, h * 1. / 100 * scale))
+    plt.subplots_adjust(
+        left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
+
+    plt.imshow(image, 'bone')
 
     for pare in a:
         cs = a[pare][frame_name]['cs']
         if cs > 5:
             cows = pare.split(" VS ")
-            message = "Heat Occurrence: "
+            message = "probably heat: "
             if ("Nose" in cows[0]):
                 message = message + "Cow" + cows[0][len(cows[0]) - 1] + " "
             if ("Nose" in cows[1]):
                 message = message + "Cow" + cows[1][len(cows[1]) - 1] + " "
-            draw.text((x, y), message, fill=color, font=font)
-            y -= 30
+            plt.text(
+                x,
+                y,
+                message,
+                fontsize=18,
+                bbox=dict(facecolor='yellow', alpha=0.9),
+                color='red')
+            y += 20
 
-    image.save('cow_all10_heat/' + frame_name.split('/')[1])
+    plt.xlim(0, w)
+    plt.ylim(0, h)
+    plt.axis('off')
+    plt.subplots_adjust(
+    left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
+    plt.gca().invert_yaxis()
+
+    plt.savefig('cow_all10_heat/' + frame_name.split('/')[1])
+    plt.close("all")
+
+# font = ImageFont.truetype("arial.ttf", size=25)
+# color = 'rgb(255, 0, 0)'
+# nframes = len(Dataframe.index)
+# for index in tqdm(range(nframes)):
+
+#     (x, y) = (20, 10)
+
+#     frame_name = Dataframe.index[index]
+#     image = Image.open(frame_name)
+#     draw = ImageDraw.Draw(image)
+
+#     for pare in a:
+#         cs = a[pare][frame_name]['cs']
+#         if cs > 5:
+#             cows = pare.split(" VS ")
+#             message = "probably heat: "
+#             if ("Nose" in cows[0]):
+#                 message = message + "Cow" + cows[0][len(cows[0]) - 1] + " "
+#             if ("Nose" in cows[1]):
+#                 message = message + "Cow" + cows[1][len(cows[1]) - 1] + " "
+#             draw.text((x, y), message, fill=color, font=font)
+#             y -= 30
+
+#     image.save('cow_all10_heat/' + frame_name.split('/')[1])
 # ------
+
+
 # count = 1
 # for pare in a:
 #     print("-------->", pare, count)
 #     count += 1
 #     for frame in a[pare]:
-#         if a[pare][frame]['cs'] >= 5:
+#         if a[pare][frame]['cs'] > 5:
 #             print("=======>", frame, "Count State:", a[pare][frame]['cs'])
