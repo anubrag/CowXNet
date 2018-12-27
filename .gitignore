@@ -8,6 +8,7 @@ pose-tensorflow/models/
 Generating_a_Training_Set/
 temp/
 .vscode/
+Behavior-tools/cow_all10/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

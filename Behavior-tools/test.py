@@ -46,13 +46,13 @@ def test(Dataframe):
                         point_A = [[xA, yA]]
                         point_B = [[xB, yB]]
                         heat_prob, fac = X.analyzeHeatProbOnFrame(point_A, point_B)
-                        if index != 50:
+                        if index != 0:
                             recent_cs = state_collector[main_bp + " VS " + factor_bp][Dataframe.index[index - 1]]['cs']
                             current_cs = recent_cs + fac
                         else:
                             current_cs = fac
                     else:
-                        if index != 50:
+                        if index != 0:
                             heat_prob = state_collector[main_bp + " VS " + factor_bp][Dataframe.index[index - 1]]['heat_prob']
                             if heat_prob:
                                 current_cs = state_collector[main_bp + " VS " + factor_bp][Dataframe.index[index - 1]]['cs'] + 1
@@ -78,7 +78,7 @@ Dataframe = pd.read_hdf("../temp/train_10fr_500/CollectedData_Sky.h5")
 a = dict(test(Dataframe))
 
 # ------
-font = ImageFont.truetype('Roboto-Bold.ttf', size=25)
+font = ImageFont.truetype("arial.ttf", size=25)
 color = 'rgb(255, 0, 0)'
 nframes = len(Dataframe.index)
 for index in tqdm(range(nframes)):
