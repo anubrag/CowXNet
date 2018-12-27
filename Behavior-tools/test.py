@@ -37,7 +37,11 @@ def test(Dataframe):
 
         for main_bpindex, main_bp in enumerate(bodyparts2plot):
             for factor_bpindex, factor_bp in enumerate(bodyparts2plot):
-                if ((main_bp[-5:] not in factor_bp) and (((main_bp + " VS " + factor_bp not in state_collector.keys()) and (factor_bp + " VS " + main_bp not in state_collector.keys())) and (frame_name not in state_collector[main_bp + " VS " + factor_bp].keys()))):
+                if (
+                    (main_bp[-5:] not in factor_bp) and \
+                    (factor_bp + " VS " + main_bp not in state_collector.keys()) and \
+                    (frame_name not in state_collector[main_bp + " VS " + factor_bp].keys()) \
+                    ):
                     xA = Dataframe[scorer][main_bp]['x'].values[index]
                     yA = Dataframe[scorer][main_bp]['y'].values[index]
                     xB = Dataframe[scorer][factor_bp]['x'].values[index]
@@ -91,20 +95,22 @@ for index in tqdm(range(nframes)):
 
     for pare in a:
         cs = a[pare][frame_name]['cs']
-        if cs >= 5:
+        if cs > 5:
             cows = pare.split(" VS ")
-            if "Nose" in cows[0]:
-                message = "Heat: " + "Cow" + cows[0][len(cows[0]) - 1]
-            else:
-                message = "Heat: " + "Cow" + cows[1][len(cows[1]) - 1]
+            message = "Heat Occurrence: "
+            if ("Nose" in cows[0]):
+                message = message + "Cow" + cows[0][len(cows[0]) - 1] + " "
+            if ("Nose" in cows[1]):
+                message = message + "Cow" + cows[1][len(cows[1]) - 1] + " "
             draw.text((x, y), message, fill=color, font=font)
             y -= 30
 
     image.save('cow_all10_heat/' + frame_name.split('/')[1])
 # ------
-
+# count = 1
 # for pare in a:
-#     print("-------->", pare)
+#     print("-------->", pare, count)
+#     count += 1
 #     for frame in a[pare]:
 #         if a[pare][frame]['cs'] >= 5:
 #             print("=======>", frame, "Count State:", a[pare][frame]['cs'])
