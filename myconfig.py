@@ -10,7 +10,7 @@
 # Step 1: Selecting Frames from videos
 ########################################
 
-Task = 'cowALL'
+Task = 'cows'
 
 # Filename and path to behavioral video:
 videopath = '.'
@@ -88,7 +88,7 @@ alphavalue =.6 #transparency of labels
 # Step 4: Generate Training Files 
 ########################################
 
-date = 'Nov4'
+date = 'Jan26'
 scorer = 'Sky'
 
 # Userparameters for training set. Other parameters can be set in pose_cfg.yaml
